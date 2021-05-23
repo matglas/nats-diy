@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+
+  nats:
+    image: nats
+
+  send:
+    image: golang:1.16
+    working_dir: /go/src
+    volumes: 
+      - ../:/go/src
+    command: ["go", "run", "main.go"]
+    environment: 
+      - "NAME=server1"
+      - "LISTEN_FOR=server2"
+      - "SEND=true"
+
+  receive:
+    image: golang:1.16
+    working_dir: /go/src
+    volumes: 
+      - ../:/go/src
+    command: ["go", "run", "main.go"]
+    environment: 
+      - "NAME=server2"
+      - "LISTEN_FOR=server1"
